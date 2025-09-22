@@ -1,0 +1,144 @@
+<!DOCTYPE html>  
+<html lang="es">  
+<head>  
+<meta charset="UTF-8">  
+<title>El Misterio de las Flores 🕵️‍♀️🌹</title>  
+<style>  
+body{  
+  background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), radial-gradient(circle at center, #1a0000 0%, #0d0000 50%, #000 100%);  
+  background-size: cover;  
+  display:flex; flex-direction:column; justify-content:flex-start; align-items:center;  
+  height:100vh; margin:0; font-family:"Poppins",sans-serif; text-align:center; color:#fff; overflow:hidden;  
+  padding-top:50px;  
+}  
+h1{color:#e50914; font-size:2.5em; margin-bottom:20px; text-shadow:0 0 10px #e50914,0 0 20px #ff1a1a; animation: fadeInDown 1.5s ease;}  
+.message-box{margin-bottom:15px; font-size:20px; color:#ffeded; min-height:80px; font-weight:600; padding:10px 15px; border-radius:12px; background:rgba(229,9,20,0.2); box-shadow:0 0 10px rgba(229,9,20,0.6); text-shadow:0 0 5px #e50914; width:80%; max-width:500px; position:relative; z-index:3;}  
+.flower{position:relative; width:250px; height:250px; animation: float 4s ease-in-out infinite; margin-top:20px;}  
+.petal{width:120px; height:60px; background:#111; border:2px solid #e50914; border-radius:60%; position:absolute; top:50%; left:50%; transform-origin:left center; cursor:pointer; transition: transform 0.4s, opacity 0.4s, box-shadow 0.3s; box-shadow:0 0 12px rgba(229,9,20,0.8), inset 0 0 8px rgba(255,0,0,0.5);}  
+.petal:hover{transform: scale(1.1) translateX(95px);}  
+.petal.clicked{opacity:0.3; pointer-events:none;}  
+.center{width:80px; height:80px; background: radial-gradient(circle,#111,#000); border:2px solid #e50914; border-radius:50%; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); display:flex; justify-content:center; align-items:center; font-size:2.5em; color:#fff; text-shadow:0 0 10px #e50914; cursor:pointer;}  
+.bouquet{display:none; margin-top:30px; animation: fadeUp 2s forwards;}  
+.bouquet img{width:260px; border-radius:12px; filter:drop-shadow(0px 6px 12px rgba(229,9,20,0.8));}  
+.question-box{display:none; margin-top:20px; padding:15px; border-radius:10px; background:rgba(229,9,20,0.2); box-shadow:0 0 12px rgba(229,9,20,0.6); animation: fadeIn 2s forwards;}  
+.question-box p{font-size:1.2em; font-weight:bold; margin-bottom:15px; color:#ffeded;}  
+button{padding:10px 20px; font-size:1em; border:none; border-radius:8px; margin:0 10px; cursor:pointer; transition:0.3s;}  
+#yesBtn{background:#e50914; color:white; box-shadow:0 0 8px #e50914;}  
+#yesBtn:hover{ transform:scale(1.1);}  
+#noBtn{background:#333; color:white;}  
+@keyframes fadeIn{from{opacity:0;} to{opacity:1;}}     
+@keyframes fadeInDown{from{opacity:0; transform:translateY(-20px);} to{transform:translateY(0);}}     
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}    
+@keyframes fadeUp{from{opacity:0; transform:translateY(50px);} to{opacity:1; transform:translateY(0);}}  
+</style>  
+</head>  
+<body>  
+<h1>STRANGER FLOWERS</h1>  
+<div class="message-box" id="messageBox">Pétalos restantes: <span id="counter">20</span>. Descifra la verdad... 🤫</div>  
+<div class="flower" id="flower"></div>  
+  
+<div class="bouquet">  
+  <img src="A_digital_graphic_design_inspired_by_the_Netflix_s.png" alt="Recompensa final">  
+  <p style="margin-top:10px;color:#e50914;font-weight:bold;font-size:1.2em;">¡CÓDIGO SECRETO DESBLOQUEADO!</p>  
+</div>  
+  
+<div class="question-box" id="questionBox">  
+  <p>¿Quieres ver Stranger Things conmigo? 🥺❤️</p>  
+  <button id="yesBtn">Sí</button>  
+  <button id="noBtn">No</button>  
+</div>  
+  
+<script>  
+const petalsData=[  
+{clue:"Mi brújula, siempre me guías.", reveal:"Eres mi centro y mi persona favorita, siempre."},  
+{clue:"Tu voz me saca del Upside Down.", reveal:"Tu voz me trae calma y me hace sentir seguro."},  
+{clue:"Somos el dúo que derrotó al Demogorgon.", reveal:"Juntos podemos enfrentar cualquier desafío que venga."},  
+{clue:"El número en mi brazo, mi identidad.", reveal:"Eres lo más real y hermoso que tengo en mi vida."},  
+{clue:"El código secreto del A.V. Club.", reveal:"No necesito una Supercom para saber que mi corazón solo te envía señales a ti."},  
+{clue:"Las luces de Navidad parpadean por ti.", reveal:"Tu luz ilumina mis días más oscuros."},  
+{clue:"El juramento del Snow Ball.", reveal:"Te mereces todos los bailes, y yo los bailaré contigo."},  
+{clue:"Te quiero en todos los mundos posibles.", reveal:"Eres mi otra mitad, no te quiero perder nunca."},  
+{clue:"Nuestro paseo en bicicleta por Hawkins.", reveal:"Cada momento contigo es una aventura que atesoro."},  
+{clue:"Mi walkie-talkie, siempre me contestas.", reveal:"Aunque estemos a kilómetros de distancia, siempre sé que estás ahí, lista para hablar. Eres mi conexión más clara."},  
+{clue:"Eres mi hogar, más que Hopper.", reveal:"Contigo me siento en casa, no importa dónde estemos."},  
+{clue:"El helado de cereza más dulce.", reveal:"Eres la cosa más dulce y maravillosa que me ha pasado."},  
+{clue:"El casete que detiene el portal.", reveal:"Siempre te salvaré, sin importar qué tan alto tenga que poner la música."},  
+{clue:"Tu sonrisa es mi cable a tierra.", reveal:"Me devuelves la cordura y la alegría."},  
+{clue:"Los waffles son la clave de la felicidad.", reveal:"Eres mi recompensa más deliciosa."},  
+{clue:"Te defiendo de cualquier demogorgon.", reveal:"Siempre seré tu guardián y protector."},  
+{clue:"El centro de mi universo (y el de Hawkins).", reveal:"Eres la razón de mis días."},  
+{clue:"La promesa de vernos de nuevo.", reveal:"Nunca hay un adiós, solo un 'hasta pronto'."},  
+{clue:"Tu voz me dice que soy un héroe.", reveal:"Gracias por creer en mí, eres mi inspiración."},  
+{clue:"El fin de todas mis búsquedas.", reveal:"Eres lo mejor que me ha pasado y te querré hasta el final."}  
+];  
+  
+const flower=document.getElementById("flower");  
+const messageBox=document.getElementById("messageBox");  
+const bouquet=document.querySelector(".bouquet");  
+const counterElement=document.getElementById("counter");  
+const questionBox=document.getElementById("questionBox");  
+const yesBtn=document.getElementById("yesBtn");  
+const noBtn=document.getElementById("noBtn");  
+  
+let clickedCount=0;  
+const finalMessages=[];  
+const center=document.createElement("div");  
+center.className="center"; center.textContent="1";  
+flower.appendChild(center);  
+  
+let centerClicks=0;  
+center.addEventListener("click",()=>{  
+  centerClicks++;  
+  if(centerClicks===3){  
+    alert("❤️ me hubiera encantado darte flores bien pero no sé pudo, con esto solo quiero decirte lo mucho q significas para mí y lo presente q estás en mi vida, no quiero q nunca te vayas, agradezco mucho a la suerte que ese día hayamos bailado sin saber q meses después me tendrías sonriendo como menso por ti por tus mensajes y por todo, muchas gracias por estar ojalá sean muchos 21 más pero ya bien 😝 🌹✨");
+    centerClicks=0;  
+  }  
+});  
+  
+petalsData.forEach((p,i)=>{  
+  const petal=document.createElement("div");  
+  petal.className="petal";  
+  petal.style.transform=`rotate(${i*18}deg) translateX(100px)`;  
+  petal.dataset.clue=p.clue; petal.dataset.reveal=p.reveal;  
+  flower.appendChild(petal);  
+  finalMessages.push(p.reveal);  
+  
+  petal.addEventListener("click",()=>{  
+    if(!petal.classList.contains("clicked")){  
+      clickedCount++;  
+      center.textContent=clickedCount;  
+      typeWriter(`PISTA ${clickedCount}: ${p.clue}`, messageBox,70);  
+      petal.classList.add("clicked");  
+      counterElement.textContent=petalsData.length-clickedCount;  
+  
+      if(clickedCount===petalsData.length){  
+        setTimeout(()=>{ // ⬅️ Aquí se aumenta la espera  
+          const fullMsg=finalMessages.map((msg,i)=>`(❤️${i+1}) ${msg}`).join(" ");  
+          typeWriter(`¡Mensaje Decodificado! ${fullMsg}`, messageBox,70);  
+          setTimeout(()=>{  
+            bouquet.style.display="block";   
+            setTimeout(()=>{questionBox.style.display="block";},3000);  
+          },fullMsg.length*70+1000);  
+        },5000); // ⬅️ Espera de 5 segundos antes de mostrar mensaje decodificado  
+      }  
+    }  
+  });  
+});  
+  
+function typeWriter(text, element, speed=50){  
+  let i=0; element.textContent="";  
+  const interval=setInterval(()=>{  
+    if(i<text.length){element.textContent+=text[i]; i++;}  
+    else{clearInterval(interval);}  
+  },speed);  
+}  
+  
+yesBtn.addEventListener("click",()=>{alert("¡Sabía que dirías que sí! ❤️ Palomitas y abrazos incluidos 🍿🤗");});  
+noBtn.addEventListener("mouseover",()=>{  
+  const x=Math.floor(Math.random()*(window.innerWidth-100));  
+  const y=Math.floor(Math.random()*(window.innerHeight-50));  
+  noBtn.style.position="absolute"; noBtn.style.left=`${x}px`; noBtn.style.top=`${y}px`;  
+});  
+</script>  
+</body>  
+</html>
